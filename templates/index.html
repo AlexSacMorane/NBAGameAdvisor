@@ -10,13 +10,17 @@
     <form method="POST" action="/analyse">
         Indice de clutch <input type="number" value=6 name="clutch" placeholder="Ex: 6"> <br>
         Indice de blowout <input type="number" value=20 name="blowout" placeholder="Ex: 20"> <br>
-        Indice de performance individuelle <input type="number" value=60 name="ttfl" placeholder="Ex: 60">
+        Indice de performance individuelle <input type="number" value=60 name="ttfl" placeholder="Ex: 60"> <br>
         <button type="submit">Afficher les marqueurs</button>
     </form>
 
     {% if resultat %}
         <h2>Matchs de la nuit</h2>
-        <p>{{ resultat  }}</p>
+        <ul>
+            {% for match in resultat %}
+                <li> {{ match }}</li>
+            {% endfor %}
+        </ul>
     {% endif %}
 
     <h3>

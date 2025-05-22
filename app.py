@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
+from datetime import datetime, timedelta
 import pandas as pd
+import requests
 
 app = Flask(__name__)
 
@@ -66,16 +68,18 @@ def analyse():
 
     # check there are games
     if len(games) != 0:
-        result_html = ''
+        L_matchs = []
         
         for game_id, game_df in games:
             if len(game_df) == 2:
                 team1 = game_df.iloc[0]
                 team2 = game_df.iloc[1]
 
-                result_html = result_html + f"\t{team1['TEAM_ABBREVIATION']} @ {team2['TEAM_ABBREVIATION']} \n"
+                L_matchs.append(f"{team1['TEAM_ABBREVIATION']} @ {team2['TEAM_ABBREVIATION']}")
+    else:
+        L_matchs = ['Pas de matchs']
 
-    return render_template('index.html', resultat=result_html)
+    return render_template('index.html', resultat=L_matchs)
 
 
 # Traitement du formulaire (template)
