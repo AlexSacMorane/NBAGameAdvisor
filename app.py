@@ -19,6 +19,68 @@ def home():
 # Traitement du formulaire
 @app.route('/analyse', methods=['POST'])
 def analyse():
+    # Date du jour à interroger (format MM/DD/YYYY)
+    game_date = datetime.now() - timedelta(days=1)
+
+    # Endpoint NBA Stats
+    url = 'https://stats.nba.com/stats/scoreboardv2'
+
+    # Paramètres requis
+    params = {
+        'GameDate': game_date,
+        'LeagueID': '00',
+        'DayOffset': '0'
+    }
+
+    # En-têtes importants pour éviter d'être bloqué
+    headers = {
+        'Host': 'stats.nba.com',
+        'Connection': 'keep-alive',
+        'Cache-Control': 'max-age=0',
+        'sec-ch-ua': '"Chromium";v="120", "Not:A-Brand";v="99"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/json, text/plain, */*',
+        'Sec-Fetch-Site': 'same-origin',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Dest': 'empty',
+        'Referer': 'https://www.nba.com/',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Origin': 'https://www.nba.com'
+    }
+
+    # Requête GET
+    response = requests.get(url, headers=headers, params=params, timeout=10)
+
+    if response.status_code == 200:
+        data = response.json()
+
+    # Extraire les scores par équipe
+    line_score = next(rs for rs in data['resultSets'] if rs['name'] == 'LineScore')
+    df_line = pd.DataFrame(line_score['rowSet'], columns=line_score['headers'])
+
+    # Regrouper les lignes deux par deux (home/away)
+    games = df_line.groupby('GAME_ID')
+
+    # check there are games
+    if len(games) != 0:
+        result_html = ''
+        
+        for game_id, game_df in games:
+            if len(game_df) == 2:
+                team1 = game_df.iloc[0]
+                team2 = game_df.iloc[1]
+
+                result_html = result_html + f"\t{team1['TEAM_ABBREVIATION']} @ {team2['TEAM_ABBREVIATION']} <br>"
+
+    return render_template('index.html', resultat=result_html)
+
+
+# Traitement du formulaire (template)
+@app.route('/analyse_old', methods=['POST'])
+def analyse_old():
     # Récupère la valeur envoyée depuis le champ "valeurs"
     valeurs_str = request.form['valeurs']  # Ex: "1,2,3,4"
     
