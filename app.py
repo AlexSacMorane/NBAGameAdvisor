@@ -73,7 +73,7 @@ def analyse():
                 team1 = game_df.iloc[0]
                 team2 = game_df.iloc[1]
 
-                result_html = result_html + f"\t{team1['TEAM_ABBREVIATION']} @ {team2['TEAM_ABBREVIATION']} <br>"
+                result_html = result_html + f"\t{team1['TEAM_ABBREVIATION']} @ {team2['TEAM_ABBREVIATION']} \n"
 
     return render_template('index.html', resultat=result_html)
 
