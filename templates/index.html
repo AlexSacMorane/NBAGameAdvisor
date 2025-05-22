@@ -1,1 +1,20 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analyse avec Pandas</title>
+</head>
+<body>
+    <h1>Entrer une liste de nombres (séparés par des virgules)</h1>
+    
+    <form method="POST" action="/analyse">
+        <input type="text" name="valeurs" placeholder="Ex: 1,2,3,4,5">
+        <button type="submit">Analyser</button>
+    </form>
 
+    {% if resultat %}
+        <h2>Résultat :</h2>
+        {{ resultat | safe }}
+    {% endif %}
+</body>
+</html>
