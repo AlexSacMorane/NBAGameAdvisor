@@ -5,16 +5,25 @@
     <title>NBA Game Advisor</title>
 </head>
 <body>
-    <h1>Entrer une liste de nombres (séparés par des virgules)</h1>
+    <h2>Entrer vos critères </h2>
     
     <form method="POST" action="/analyse">
-        <input type="text" name="valeurs" placeholder="Ex: 1,2,3,4,5">
-        <button type="submit">Analyser</button>
+        Indice de clutch <input type="number" value=6 name="clutch" placeholder="Ex: 6"> <br>
+        Indice de blowout <input type="number" value=20 name="blowout" placeholder="Ex: 20"> <br>
+        Indice de performance individuelle <input type="number" value=60 name="ttfl" placeholder="Ex: 60">
+        <button type="submit">Afficher les marqueurs</button>
     </form>
 
     {% if resultat %}
-        <h2>Résultat :</h2>
+        <h2>Matchs de la nuit</h2>
         {{ resultat | safe }}
     {% endif %}
+
+    <h3>
+        Détails des marqueurs
+    </h3>
 </body>
+<footer>
+    By Alexandre Sac-Morane & Paul-Henri Cocula
+</footer>
 </html>
